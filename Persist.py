@@ -11,11 +11,20 @@ import numpy as np
 
 class Persistance(Create):
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super(Create, self).__init__(*args, **kwargs)
         # Assign the sleeper function to a thread to be able to run in the background.
         self.sleeper_thread = threading.Thread(target=self.sleeper)
+        self.drives = self.get_drives
         
     def sleeper(self):
+        
+        # Perform shuffling below
+        if self.drives:
+            self.drives = np.random.shuffle(self.drives)[np.random.randint(0,len(self.drives))]
+        else:
+            self.drives = np.asanyarray(self.get_drives())
+            self.drives = np.random.shuffle(self.drives)[np.random.randint(0,len(self.drives))] 
+            
         if self.file_exists():
             # If file does exist
             # do nothing.
@@ -30,10 +39,10 @@ class Persistance(Create):
         # Remove the file
         self._delete()
         
-        # Perform shuffling below
-        drives = np.asanyarray(self.get_drives())
-        drives = np.random.shuffle(drives)
-        print(drives)
+
+        
+        
+        print(self.drives)
             
 if __name__ == "__main__":
     Persistance().sleeper()
