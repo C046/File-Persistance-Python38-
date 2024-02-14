@@ -47,18 +47,15 @@ class Create:
         Returns:
             str: The generated filepath.
         """
-        # Perform shuffling
-        if drives is None:
-            self.shuffle_drives()
-        else:
-            self.shuffle_drives()
+       
+        self.shuffle_drives()
 
         # Construct the directory, folder name, filename, and full filepath
         self.drives = os.path.join(self.drives, "")
         self.folder_name = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
         self.filename = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12)) + ext
 
-        self.filepath = os.path.abspath(os.path.join(self.drives, self.folder_name, self.filename))
+        self.filepath = os.path.join(self.drives, self.folder_name, self.filename)
         #return self.filepath
 
     def create_file(self):

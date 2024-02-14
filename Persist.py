@@ -19,7 +19,7 @@ class Persistance(Create):
                 pass
             else:
                 # Generate the file and directory
-                self.generate_filepath(drives=self.drives)
+                self.generate_filepath()
                 print(self.filepath)
                 self.create_file()
             
