@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Feb 11 09:31:31 2024
-
-@author: hadaw
-"""
 
 import os
 import secrets
 import string
+import psutil
+import numpy as np
 
 class Create:
     def __init__(self):
@@ -16,6 +12,7 @@ class Create:
         Initializes an instance with a default filepath set to None.
         """
         self.filepath = None
+        self.drives = self.get_drives()
 
     def _delete(self):
         """
@@ -34,8 +31,11 @@ class Create:
 
             except FileNotFoundError:
                 print("File or directory not found.")
-
-    def generate_filepath(self, directory=None, ext=".txt"):
+    def shuffle_drives(self):
+        np.random.shuffle(self.drives)
+        self.drives = str(self.drives[np.random.randint(0,self.drives.size)])
+        
+    def generate_filepath(self, ext=".txt", drives=None):
         """
         Generate a random filepath for a new file.
 
@@ -46,15 +46,19 @@ class Create:
         Returns:
             str: The generated filepath.
         """
-        if directory is None:
-            directory = os.path.expanduser("~")
+        # Perform shuffling
+        if drives is None:
+            self.drives = self.get_drives()
+            self.shuffle_drives()
+        else:
+            self.shuffle_drives()
 
         # Construct the directory, folder name, filename, and full filepath
-        self.directory = os.path.join(directory, "")
+        self.drives = os.path.join(self.drives, "")
         self.folder_name = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
         self.filename = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12)) + ext
 
-        self.filepath = os.path.abspath(os.path.join(self.directory, self.folder_name, self.filename))
+        self.filepath = os.path.abspath(os.path.join(self.drives, self.folder_name, self.filename))
         return self.filepath
 
     def create_file(self):
@@ -88,5 +92,10 @@ class Create:
         else:
             return False
         
-    def persistance(self):
-        pass
+    def get_drives(self):
+        if os.name == 'posix':
+            return np.asanyarray([part.device for part in psutil.disk_partitions()]) if 'psutil' in globals() else np.asanyarray([])
+        elif os.name == 'nt':
+            return np.asanyarray([os.path.abspath(f"{chr(d)}:\\") for d in range(ord('A'), ord('Z') + 1) if os.path.exists(f"{chr(d)}:")])
+        else:
+            return np.asanyarray([])
