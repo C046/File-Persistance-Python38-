@@ -23,13 +23,14 @@ class Persistance(Create):
                 print(self.filepath)
                 self.create_file()
             
-            # Set the filepath to none
-            self.filepath = None
+            
             
             # Sleep for 60 seconds
             time.sleep(60)
             # Remove the file
             self._delete()
+            # Set the filepath to none
+            self.filepath = None
 
 
 if __name__ == "__main__":
