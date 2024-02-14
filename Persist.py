@@ -1,4 +1,3 @@
-
 import threading
 import time
 import psutil
@@ -10,24 +9,28 @@ class Persistance(Create):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Assign the sleeper function to a thread to be able to run in the background.
-        self.sleeper_thread = threading.Thread(target=self.sleeper)
+        self.sleeper_thread = threading.Thread(target=self.sleeper())
         self.sleeper_thread.start()
-    
+
     def sleeper(self):
-        if self.file_exists():
-            # If file does exist, do nothing.
-            pass
-        else:
-            # Generate the file and directory
-            self.generate_filepath(drives=self.drives)
-            self.create_file()
+        while True:
+            if self.file_exists():
+                # If file does exist, do nothing.
+                pass
+            else:
+                # Generate the file and directory
+                self.generate_filepath(drives=self.drives)
+                print(self.filepath)
+                self.create_file()
+            
+            # Set the filepath to none
+            self.filepath = None
+            
+            # Sleep for 60 seconds
+            time.sleep(60)
+            # Remove the file
+            self._delete()
 
-        # Sleep for 30 seconds
-        time.sleep(60)
-        # Remove the file
-        self._delete()
-
-        
 
 if __name__ == "__main__":
     Persistance()

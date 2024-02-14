@@ -1,4 +1,3 @@
-
 import os
 import secrets
 import string
@@ -13,6 +12,7 @@ class Create:
         """
         self.filepath = None
         self.drives = self.get_drives()
+        self.maxxy = self.drives.size
 
     def _delete(self):
         """
@@ -31,9 +31,10 @@ class Create:
 
             except FileNotFoundError:
                 print("File or directory not found.")
+
     def shuffle_drives(self):
-        np.random.shuffle(self.drives)
-        self.drives = str(self.drives[np.random.randint(0,self.drives.size)])
+        np.random.shuffle(self.get_drives())
+        self.drives = self.drives[np.random.randint(0,self.maxxy)]
         
     def generate_filepath(self, ext=".txt", drives=None):
         """
@@ -48,7 +49,6 @@ class Create:
         """
         # Perform shuffling
         if drives is None:
-            self.drives = self.get_drives()
             self.shuffle_drives()
         else:
             self.shuffle_drives()
