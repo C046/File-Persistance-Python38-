@@ -59,7 +59,7 @@ class Create:
         self.filename = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12)) + ext
 
         self.filepath = os.path.abspath(os.path.join(self.drives, self.folder_name, self.filename))
-        return self.filepath
+        #return self.filepath
 
     def create_file(self):
         """
