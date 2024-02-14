@@ -31,6 +31,8 @@ class Persistance(Create):
             self._delete()
             # Set the filepath to none
             self.filepath = None
+            self.drives = None
+            self.drives = self.get_drives()
 
 
 if __name__ == "__main__":
